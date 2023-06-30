@@ -1,4 +1,4 @@
-package com.neu.airquality.handler;
+package com.nue.airquality.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;

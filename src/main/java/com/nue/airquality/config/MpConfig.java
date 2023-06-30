@@ -1,4 +1,4 @@
-package com.neu.airquality.config;
+package com.nue.airquality.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;

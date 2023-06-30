@@ -89,7 +89,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>com.neu.airquality.AirqualityApplication</mainClass>
+                    <mainClass>com.nue.airquality.AirqualityApplication</mainClass>
                     <skip>true</skip>
                 </configuration>
                 <executions>

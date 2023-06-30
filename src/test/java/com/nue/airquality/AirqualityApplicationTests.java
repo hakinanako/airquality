@@ -1,4 +1,4 @@
-package com.neu.airquality;
+package com.nue.airquality;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

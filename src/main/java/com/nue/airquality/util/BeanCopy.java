@@ -1,4 +1,4 @@
-package com.neu.airquality.util;
+package com.nue.airquality.util;
 
 import org.springframework.beans.BeanUtils;
 

@@ -1,4 +1,4 @@
-package com.neu.airquality.common;
+package com.nue.airquality.common;
 
 public class ECode {
         /**

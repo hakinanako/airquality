@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.neu.airquality.demos.web;
+package com.nue.airquality.demos.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
