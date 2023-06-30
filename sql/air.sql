@@ -11,7 +11,7 @@ create table if not exists district
 
 create table if not exists t_air_exception
 (
-    id          int          not null
+    id          bigint         not null
         primary key,
     user        bigint       null comment '上报用户id/关联用户表',
     handlers    bigint       null comment '处理人id/关联用户表',
