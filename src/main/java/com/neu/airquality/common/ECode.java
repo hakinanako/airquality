@@ -1,6 +1,6 @@
 package com.neu.airquality.common;
 
-public class ErrorCode {
+public class ECode {
         /**
          * 操作成功
          */
