@@ -1,4 +1,4 @@
-create table if not exists district
+create table if not exists t_district
 (
     id          bigint      not null
         primary key,

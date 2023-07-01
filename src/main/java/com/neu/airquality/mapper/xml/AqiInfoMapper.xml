@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.airquality.mapper.AqiInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.neu.airquality.pojo.AqiInfo">
+        <id column="id" property="id" />
+        <result column="district" property="district" />
+        <result column="pm25" property="pm25" />
+        <result column="so2" property="so2" />
+        <result column="co" property="co" />
+        <result column="aqi" property="aqi" />
+        <result column="level" property="level" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_time" property="createTime" />
+        <result column="version" property="version" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, district, pm25, so2, co, aqi, level, is_deleted, update_time, create_time, version
+    </sql>
+
+</mapper>

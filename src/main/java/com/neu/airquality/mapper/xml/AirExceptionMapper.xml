@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.airquality.mapper.AirExceptionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.neu.airquality.pojo.AirException">
+        <id column="id" property="id" />
+        <result column="user" property="user" />
+        <result column="handlers" property="handlers" />
+        <result column="district" property="district" />
+        <result column="address" property="address" />
+        <result column="name" property="name" />
+        <result column="picture" property="picture" />
+        <result column="description" property="description" />
+        <result column="status" property="status" />
+        <result column="info_id" property="infoId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_time" property="createTime" />
+        <result column="version" property="version" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user, handlers, district, address, name, picture, description, status, info_id, is_deleted, update_time, create_time, version
+    </sql>
+
+</mapper>
