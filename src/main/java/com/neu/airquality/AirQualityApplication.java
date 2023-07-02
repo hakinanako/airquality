@@ -1,5 +1,7 @@
 package com.neu.airquality;
 
+import cn.dev33.satoken.SaManager;
+import cn.dev33.satoken.config.SaTokenConfig;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.annotation.MapperScans;
 import org.springframework.boot.SpringApplication;
@@ -11,6 +13,8 @@ public class AirQualityApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(AirQualityApplication.class, args);
+        SaTokenConfig config = SaManager.getConfig();
+        System.out.println("config = " + config);
     }
 
 }
