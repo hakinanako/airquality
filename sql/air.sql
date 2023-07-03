@@ -17,7 +17,6 @@ create table if not exists t_air_exception
     handlers    bigint       null comment '处理人id/关联用户表',
     district    bigint       null comment '区域id/关联区域表',
     address     varchar(255) null comment '详细地址',
-    name        varchar(31)  null comment '姓名',
     picture     varchar(255) null comment '图片',
     description varchar(255) null comment '描述',
     status      tinyint      null comment '处理状态',
