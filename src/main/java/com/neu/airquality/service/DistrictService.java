@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface DistrictService extends IService<District> {
 
+    String getStringBaseResult(Long id);
 }

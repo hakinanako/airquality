@@ -6,19 +6,21 @@ import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.neu.airquality.common.BaseResult;
 import com.neu.airquality.pojo.User;
 import com.neu.airquality.req.LoginReq;
 import com.neu.airquality.req.UserReq;
+import com.neu.airquality.service.DistrictService;
 import com.neu.airquality.service.UserService;
+import com.neu.airquality.vo.UserVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,6 +36,8 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private DistrictService districtService;
 
     /**
      * 用户登录
@@ -141,6 +145,7 @@ public class UserController {
     /**
      * 密码校验
      */
+    @SaCheckLogin
     @PostMapping("/check")
     public BaseResult<String> check(
             @RequestBody UserReq userReq) {
@@ -161,6 +166,7 @@ public class UserController {
     /**
      * 修改密码
      */
+    @SaCheckLogin
     @PostMapping("/update")
     public BaseResult<String> update(
             @RequestBody UserReq userReq) {
@@ -183,6 +189,7 @@ public class UserController {
     /**
      * 修改信息
      */
+    @SaCheckLogin
     @PostMapping("/updateInfo")
     public BaseResult<String> updateInfo(
             @RequestBody UserReq userReq) {
@@ -205,6 +212,7 @@ public class UserController {
     /**
      * 获取用户信息
      */
+    @SaCheckRole("admin")
     @PostMapping("/info")
     public BaseResult<User> info(
             @RequestBody UserReq userReq) {
@@ -219,52 +227,40 @@ public class UserController {
             return BaseResult.ok(one);
         }
     }
-
     /**
-     * 获取用户列表
+     * 获取不同type用户列表
      */
-    @PostMapping("/list")
-    public BaseResult<List<User>> list() {
-        List<User> list = userService.list();
-        return BaseResult.ok(list);
-    }
-
-    /**
-     * 获取普通用户列表
-     */
-    @PostMapping("/listUser")
-    public BaseResult<List<User>> listUser() {
+    @SaCheckRole("admin")
+    @GetMapping("/list/{type}/{pageSize}/{pageNum}")
+    public BaseResult<PageInfo<UserVO>> listAdmin(@PathVariable(value = "pageSize") Integer pageSize,
+                                                @PathVariable(value = "pageNum") Integer pageNum,
+                                                @PathVariable(value = "type") Integer type) {
+        String orderByColumn = "id"+" asc";
+        PageHelper.startPage(pageNum,pageSize,orderByColumn);
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getType, 1);
+        wrapper.eq(User::getType, type);
         List<User> list = userService.list(wrapper);
-        return BaseResult.ok(list);
+        List<UserVO> UserVOs = new ArrayList<>();
+        for (User user : list) {
+            Long area = user.getArea();
+            UserVO userVO = new UserVO(){
+                {
+                    BeanUtils.copyProperties(user,this);
+                }
+            };
+            if (area != null) {
+                String districtName = districtService.getStringBaseResult(area);
+                userVO.setDistrictName(districtName);
+            }
+            UserVOs.add(userVO);
+        }
+        PageInfo<UserVO> pageInfo = new PageInfo<>(UserVOs);
+        return BaseResult.ok(pageInfo);
     }
-
-    /**
-     * 获取aqi列表
-     */
-    @PostMapping("/listAqi")
-    public BaseResult<List<User>> listAdmin() {
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getType, 2);
-        List<User> list = userService.list(wrapper);
-        return BaseResult.ok(list);
-    }
-
-    /**
-     * 获取管理员列表
-     */
-    @PostMapping("/listAdmin")
-    public BaseResult<List<User>> listAqi() {
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getType, 3);
-        List<User> list = userService.list(wrapper);
-        return BaseResult.ok(list);
-    }
-
     /**
      * 移除用户
      */
+    @SaCheckRole("admin")
     @PostMapping("/remove")
     public BaseResult<String> remove(
             @RequestBody Long id) {
