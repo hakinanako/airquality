@@ -13,6 +13,10 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName("updateTime", new Date(), metaObject);
         this.setFieldValByName("isDeleted", 0, metaObject);
         this.setFieldValByName("version", 1, metaObject);
+        //设置处理状态
+        this.setFieldValByName("status", 1, metaObject);
+        //设置处置人id
+        this.setFieldValByName("handles", null, metaObject);
     }
     @Override
     public void updateFill(MetaObject metaObject) {

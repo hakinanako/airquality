@@ -40,8 +40,6 @@ public class AirException implements Serializable {
     @ApiModelProperty(value = "详细地址")
     private String address;
 
-    @ApiModelProperty(value = "姓名")
-    private String name;
 
     @ApiModelProperty(value = "图片")
     private String picture;
