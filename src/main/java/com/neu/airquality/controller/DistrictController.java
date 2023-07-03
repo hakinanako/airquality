@@ -2,17 +2,13 @@ package com.neu.airquality.controller;
 
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
-import cn.dev33.satoken.annotation.SaCheckRole;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.neu.airquality.common.BaseResult;
 import com.neu.airquality.pojo.District;
-import com.neu.airquality.pojo.User;
 import com.neu.airquality.service.DistrictService;
 import com.neu.airquality.vo.DistrictVO;
-import com.neu.airquality.vo.UserVO;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,14 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author 
- * @since 2023-07-01
- */
 @RestController
 @RequestMapping("/district")
 public class DistrictController {

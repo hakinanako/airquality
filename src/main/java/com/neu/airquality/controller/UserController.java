@@ -23,14 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author 
- * @since 2023-07-01
- */
 @RestController
 @RequestMapping("/user")
 public class UserController {
