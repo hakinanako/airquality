@@ -4,18 +4,15 @@ package com.neu.airquality.controller;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.annotation.SaMode;
 import cn.dev33.satoken.stp.StpUtil;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.neu.airquality.common.BaseResult;
-import com.neu.airquality.pojo.AirException;
 import com.neu.airquality.pojo.AqiInfo;
 import com.neu.airquality.service.AirExceptionService;
 import com.neu.airquality.service.AqiInfoService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.expression.EvaluationException;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -62,6 +59,19 @@ public class AqiInfoController {
             return BaseResult.ok("空气质量信息-api上传成功", aqiInfo);
         }
         return BaseResult.fail("错误:空气质量信息-上传失败", aqiInfo);
+    }
+
+    /**
+     * 获取所有空气质量信息
+     *
+     * @return
+     */
+    //ToDo 未确定是否分页
+    @PostMapping()
+    public BaseResult<List<AqiInfo>> query() {
+        List<AqiInfo> aqiInfos = aqiInfoService.list();
+        if (aqiInfos == null) return BaseResult.fail("无信息");
+        return BaseResult.ok(aqiInfos);
     }
 }
 
