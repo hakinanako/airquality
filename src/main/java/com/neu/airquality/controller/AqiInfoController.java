@@ -1,6 +1,7 @@
 package com.neu.airquality.controller;
 
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.annotation.SaMode;
 import cn.dev33.satoken.stp.StpUtil;
@@ -10,6 +11,7 @@ import com.neu.airquality.pojo.AirException;
 import com.neu.airquality.pojo.AqiInfo;
 import com.neu.airquality.service.AirExceptionService;
 import com.neu.airquality.service.AqiInfoService;
+import com.neu.airquality.util.AqiHelper;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +54,18 @@ public class AqiInfoController {
             return BaseResult.ok("空气质量信息-api上传成功", aqiInfo);
         }
         return BaseResult.fail("错误:空气质量信息-上传失败", aqiInfo);
+    }
+
+    /**
+     * 处理异常信息-返回Aqi等级
+     */
+    @SaCheckLogin
+    @GetMapping("/level/{pm25}/{co}/{so2}/")
+    public BaseResult<String> handleLevel(@ApiParam(name = "pm25", value = "pm25") @PathVariable Double pm25,
+                                          @ApiParam(name = "co", value = "co") @PathVariable Double co,
+                                          @ApiParam(name = "so2", value = "so2") @PathVariable Double so2){
+        int level = AqiHelper.calculateAQI(pm25, co, so2);
+        return BaseResult.ok("空气质量信息-处理成功", level+" ");
     }
 }
 

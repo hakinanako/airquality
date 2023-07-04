@@ -69,5 +69,7 @@ public class AirExceptionController {
         return BaseResult.ok(airExceptions);
     }
 
+
+
 }
 

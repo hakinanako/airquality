@@ -6,6 +6,7 @@ CREATE TABLE `t_air_exception` (
                                    `address` varchar(255) CHARACTER SET utf8 NOT NULL,
                                    `name` varchar(31) CHARACTER SET utf8 NOT NULL,
                                    `picture` varchar(255) DEFAULT NULL COMMENT '图片',
+                                   `level` tinyint(4) DEFAULT NULL COMMENT '预估等级',
                                    `description` varchar(255) CHARACTER SET utf8 NOT NULL,
                                    `status` tinyint(4) DEFAULT NULL COMMENT '处理状态',
                                    `info_id` bigint(20) DEFAULT NULL COMMENT '检测结果id/关联info表',
