@@ -3,29 +3,18 @@ package com.neu.airquality.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.neu.airquality.common.BaseResult;
 import com.neu.airquality.pojo.AirException;
 import com.neu.airquality.req.AirExceptionReq;
 import com.neu.airquality.service.AirExceptionService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import kotlin.Result;
-import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author 
- * @since 2023-07-01
- */
+
 @RestController
 @RequestMapping("/air-exception")
 public class AirExceptionController {

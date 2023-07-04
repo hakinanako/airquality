@@ -12,19 +12,9 @@ import com.neu.airquality.service.AirExceptionService;
 import com.neu.airquality.service.AqiInfoService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.expression.EvaluationException;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 
-/**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author 
- * @since 2023-07-01
- */
 @RestController
 @RequestMapping("/aqi-info")
 public class AqiInfoController {
