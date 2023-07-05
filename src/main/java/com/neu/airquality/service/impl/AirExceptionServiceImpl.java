@@ -44,12 +44,14 @@ public class AirExceptionServiceImpl extends ServiceImpl<AirExceptionMapper, Air
         Long district = airExceptionReq.getDistrict();
         String picture = airExceptionReq.getPicture();
         String description = airExceptionReq.getDescription();
+        Integer level = airExceptionReq.getLevel();
         AirException airException = new AirException();
         airException.setUser(user);
         airException.setAddress(address);
         airException.setDistrict(district);
         airException.setPicture(picture);
         airException.setDescription(description);
+        airException.setLevel(level);
         save(airException);
           return true;
         }

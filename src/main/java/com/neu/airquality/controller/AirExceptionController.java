@@ -15,14 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author 
- * @since 2023-07-01
- */
+
 @RestController
 @RequestMapping("/air-exception")
 public class AirExceptionController {

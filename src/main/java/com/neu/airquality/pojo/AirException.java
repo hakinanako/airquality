@@ -71,5 +71,7 @@ public class AirException implements Serializable {
     @Version
     private Integer version;
 
+    @ApiModelProperty(value = "预估等级")
+    private Integer level;
 
 }
