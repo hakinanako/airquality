@@ -9,18 +9,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * <p>
- * 
- * </p>
- *
- * @author 
- * @since 2023-07-01
- */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_district")
-@ApiModel(value="District对象", description="")
+@ApiModel(value="District对象")
 public class District implements Serializable {
 
     private static final long serialVersionUID = 1L;

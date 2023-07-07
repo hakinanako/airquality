@@ -6,21 +6,11 @@ import com.neu.airquality.mapper.AirExceptionMapper;
 import com.neu.airquality.req.AirExceptionReq;
 import com.neu.airquality.service.AirExceptionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.neu.airquality.service.AqiInfoService;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-/**
- * <p>
- *  服务实现类
- * </p>
- *
- * @author 
- * @since 2023-07-01
- */
 @Service
 public class AirExceptionServiceImpl extends ServiceImpl<AirExceptionMapper, AirException> implements AirExceptionService {
 
@@ -29,14 +19,13 @@ public class AirExceptionServiceImpl extends ServiceImpl<AirExceptionMapper, Air
             LambdaQueryWrapper<AirException> queryWrapper = new LambdaQueryWrapper<>();
             //查看异常任务
             queryWrapper.eq(AirException::getUser, id);
-            List<AirException> list = this.list(queryWrapper);
-            return list;
+            return this.list(queryWrapper);
         }
 
 
         @SneakyThrows
         @Override
-        public boolean addAirExceptionForUser(AirExceptionReq airExceptionReq) {
+        public void addAirExceptionForUser(AirExceptionReq airExceptionReq) {
             if (airExceptionReq == null) throw new IllegalAccessException("请求信息为空");
 
             Long user = airExceptionReq.getUser();
@@ -52,9 +41,9 @@ public class AirExceptionServiceImpl extends ServiceImpl<AirExceptionMapper, Air
             airException.setPicture(picture);
             airException.setDescription(description);
             airException.setLevel(level);
-            save(airException);
+            boolean save = save(airException);
+            if (!save) throw new IllegalAccessException("保存失败");
 
-            return true;
         }
 
         @SneakyThrows

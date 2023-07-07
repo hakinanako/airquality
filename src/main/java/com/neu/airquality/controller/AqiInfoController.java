@@ -1,6 +1,4 @@
 package com.neu.airquality.controller;
-
-
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.annotation.SaMode;
@@ -88,15 +86,5 @@ public class AqiInfoController {
         }
 
     }
-
-        /**
-         * 处理异常信息-返回Aqi等级
-         */
-        @SaCheckLogin
-        @GetMapping("/level")
-        public BaseResult<String> handleLevel (@RequestBody AqiReq aqiReq){
-            int level = AqiHelper.calculateAQI(aqiReq.getPm25(), aqiReq.getCo(), aqiReq.getSo2());
-            return BaseResult.ok("空气质量信息-处理成功", level + " ");
-        }
     }
 

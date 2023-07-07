@@ -9,18 +9,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * <p>
- * 
- * </p>
- *
- * @author 
- * @since 2023-07-01
- */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_user")
-@ApiModel(value="User对象", description="")
+@ApiModel(value="User对象")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;

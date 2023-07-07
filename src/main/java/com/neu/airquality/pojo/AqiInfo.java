@@ -11,18 +11,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * <p>
- * 
- * </p>
- *
- * @author 
- * @since 2023-07-01
- */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_aqi_info")
-@ApiModel(value="AqiInfo对象", description="")
+@ApiModel(value="AqiInfo对象")
 public class AqiInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;

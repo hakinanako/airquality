@@ -6,14 +6,6 @@ import com.neu.airquality.req.AirExceptionReq;
 
 import java.util.List;
 
-/**
- * <p>
- *  服务类
- * </p>
- *
- * @author 
- * @since 2023-07-01
- */
 public interface AirExceptionService extends IService<AirException> {
 
 
@@ -25,7 +17,7 @@ public interface AirExceptionService extends IService<AirException> {
     /**
      * 用户上传异常信息
      */
-    boolean addAirExceptionForUser(AirExceptionReq airExceptionReq);
+    void addAirExceptionForUser(AirExceptionReq airExceptionReq);
 
     /**
      * 管理员设置处理人

@@ -10,10 +10,6 @@ public class ECode {
          * 操作失败
          */
         public static final Integer FAIL = 50000;
-        /**
-         * 补充
-         */
-        public static final Integer XXX = 00000;
     }
 
 

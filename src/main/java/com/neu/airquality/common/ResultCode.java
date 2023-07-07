@@ -9,11 +9,7 @@ public enum ResultCode {
 
     FAIL(50000, "操作失败"),
 
-    ERROR(52000, "未知错误"),
-    /**
-     * 补充
-     */
-    XXX(00000, "补充");
+    ERROR(52000, "未知错误");
 
     private Integer code;
 

@@ -60,8 +60,6 @@ public class AirExceptionController {
             return BaseResult.fail(e.getMessage());
         }
 
-
-
     }
 
     /**
