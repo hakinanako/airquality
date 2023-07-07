@@ -3,8 +3,6 @@ package com.neu.airquality.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.neu.airquality.pojo.AirException;
 import com.neu.airquality.mapper.AirExceptionMapper;
-import com.neu.airquality.pojo.AqiInfo;
-import com.neu.airquality.pojo.User;
 import com.neu.airquality.req.AirExceptionReq;
 import com.neu.airquality.service.AirExceptionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -13,7 +11,6 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -35,6 +32,7 @@ public class AirExceptionServiceImpl extends ServiceImpl<AirExceptionMapper, Air
             List<AirException> list = this.list(queryWrapper);
             return list;
         }
+
 
         @SneakyThrows
         @Override

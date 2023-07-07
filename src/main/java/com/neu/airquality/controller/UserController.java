@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
@@ -40,26 +39,33 @@ public class UserController {
     @PostMapping("/login")
     public BaseResult<SaTokenInfo> login(
             @RequestBody LoginReq loginReq) {
-        String account = loginReq.getAccount();
-        String password = loginReq.getPassword();
-        if (!account.matches(Regex.ACCOUNT_REGEX)) {
-            return BaseResult.fail("账号格式不正确");
-        }
-        if (!password.matches(Regex.PASSWORD_REGEX)) {
-            return BaseResult.fail("密码格式不正确");
-        }
-        password = DigestUtils.md5DigestAsHex(password.getBytes());
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getAccount, account);
-        User one = userService.getOne(wrapper);
-        if (one == null) {
-            return BaseResult.fail("用户不存在");
-        } else if (!one.getPassword().equals(password)) {
-            return BaseResult.fail("用户名或密码错误");
-        } else {
-            StpUtil.login(account);
-            SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
-            return BaseResult.ok(tokenInfo);
+        try {
+            String account = loginReq.getAccount();
+            String password = loginReq.getPassword();
+            if (!account.matches(Regex.ACCOUNT_REGEX)) {
+                return BaseResult.fail("账号格式不正确");
+            }
+            if (!password.matches(Regex.PASSWORD_REGEX)) {
+                return BaseResult.fail("密码格式不正确");
+            }
+            if (StringUtils.isBlank(account) || StringUtils.isBlank(password)) {
+                return BaseResult.fail("信息不能为空");
+            }
+            password = DigestUtils.md5DigestAsHex(password.getBytes());
+            LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(User::getAccount, account);
+            User one = userService.getOne(wrapper);
+            if (one == null) {
+                return BaseResult.fail("用户不存在");
+            } else if (!one.getPassword().equals(password)) {
+                return BaseResult.fail("用户名或密码错误");
+            } else {
+                StpUtil.login(account);
+                SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+                return BaseResult.ok(tokenInfo);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -99,11 +105,9 @@ public class UserController {
         try {
             userService.register(userReq);
             return BaseResult.ok("注册成功");
-        } catch (IllegalArgumentException e) {
-            return BaseResult.fail(e.getMessage());
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
-            return BaseResult.fail("注册失败");
+            throw new RuntimeException("注册失败", e);
         }
     }
 
@@ -114,21 +118,25 @@ public class UserController {
     @PostMapping("/delete")
     public BaseResult<String> delete(
             @RequestBody UserReq userReq) {
-        String account = userReq.getAccount();
-        String password = userReq.getPassword();
-        //md5加密
-        password = DigestUtils.md5DigestAsHex(password.getBytes());
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getAccount, account);
-        User one = userService.getOne(wrapper);
-        if (one == null) {
-            return BaseResult.fail("用户不存在");
-        } else if (!one.getPassword().equals(password)) {
-            return BaseResult.fail("用户名或密码错误");
-        } else {
-            StpUtil.logout();
-            userService.remove(wrapper);
-            return BaseResult.ok("注销成功");
+        try {
+            String account = userReq.getAccount();
+            String password = userReq.getPassword();
+            //md5加密
+            password = DigestUtils.md5DigestAsHex(password.getBytes());
+            LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(User::getAccount, account);
+            User one = userService.getOne(wrapper);
+            if (one == null) {
+                return BaseResult.fail("用户不存在");
+            } else if (!one.getPassword().equals(password)) {
+                return BaseResult.fail("用户名或密码错误");
+            } else {
+                StpUtil.logout();
+                userService.remove(wrapper);
+                return BaseResult.ok("注销成功");
+            }
+        }catch (Exception e) {
+            throw new RuntimeException("注销失败", e);
         }
     }
 
@@ -139,17 +147,21 @@ public class UserController {
     @PostMapping("/check")
     public BaseResult<String> check(
             @RequestBody UserReq userReq) {
-        String account = userReq.getAccount();
-        String password = userReq.getPassword();
-        //md5加密
-        password = DigestUtils.md5DigestAsHex(password.getBytes());
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getAccount, account);
-        User one = userService.getOne(wrapper);
-        if (!one.getPassword().equals(password)) {
-            return BaseResult.fail("密码错误");
-        } else {
-            return BaseResult.ok("密码正确");
+        try {
+            String account = userReq.getAccount();
+            String password = userReq.getPassword();
+            //md5加密
+            password = DigestUtils.md5DigestAsHex(password.getBytes());
+            LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(User::getAccount, account);
+            User one = userService.getOne(wrapper);
+            if (!one.getPassword().equals(password)) {
+                return BaseResult.fail("密码错误");
+            } else {
+                return BaseResult.ok("密码正确");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("密码校验失败", e);
         }
     }
 
@@ -160,22 +172,25 @@ public class UserController {
     @PostMapping("/update")
     public BaseResult<String> update(
             @RequestBody UserReq userReq) {
-        String account = userReq.getAccount();
-        String password = userReq.getPassword();
-        //md5加密
-        password = DigestUtils.md5DigestAsHex(password.getBytes());
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getAccount, account);
-        User one = userService.getOne(wrapper);
-        if (one == null) {
-            return BaseResult.fail("用户不存在");
-        } else {
-            one.setPassword(password);
-            userService.updateById(one);
-            return BaseResult.ok("修改成功");
+        try {
+            String account = userReq.getAccount();
+            String password = userReq.getPassword();
+            //md5加密
+            password = DigestUtils.md5DigestAsHex(password.getBytes());
+            LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(User::getAccount, account);
+            User one = userService.getOne(wrapper);
+            if (one == null) {
+                return BaseResult.fail("用户不存在");
+            } else {
+                one.setPassword(password);
+                userService.updateById(one);
+                return BaseResult.ok("修改成功");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("修改密码失败", e);
         }
     }
-
     /**
      * 修改信息
      */
@@ -183,19 +198,23 @@ public class UserController {
     @PostMapping("/updateInfo")
     public BaseResult<String> updateInfo(
             @RequestBody UserReq userReq) {
-        String account = userReq.getAccount();
-        String name = userReq.getName();
-        String phone = userReq.getPhone();
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getAccount, account);
-        User one = userService.getOne(wrapper);
-        if (one == null) {
-            return BaseResult.fail("用户不存在");
-        } else {
-            one.setName(name);
-            one.setPhone(phone);
-            userService.updateById(one);
-            return BaseResult.ok("修改成功");
+        try {
+            String account = userReq.getAccount();
+            String name = userReq.getName();
+            String phone = userReq.getPhone();
+            LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(User::getAccount, account);
+            User one = userService.getOne(wrapper);
+            if (one == null) {
+                return BaseResult.fail("用户不存在");
+            } else {
+                one.setName(name);
+                one.setPhone(phone);
+                userService.updateById(one);
+                return BaseResult.ok("修改成功");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("修改信息失败", e);
         }
     }
 
@@ -206,15 +225,19 @@ public class UserController {
     @PostMapping("/info")
     public BaseResult<User> info(
             @RequestBody UserReq userReq) {
-        String account = userReq.getAccount();
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getAccount, account);
-        User one = userService.getOne(wrapper);
-        if (one == null) {
-            return BaseResult.fail("用户不存在");
-        } else {
-            one.setPassword("");
-            return BaseResult.ok(one);
+        try {
+            String account = userReq.getAccount();
+            LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(User::getAccount, account);
+            User one = userService.getOne(wrapper);
+            if (one == null) {
+                return BaseResult.fail("用户不存在");
+            } else {
+                one.setPassword("");
+                return BaseResult.ok(one);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("获取用户信息失败", e);
         }
     }
     /**
@@ -225,27 +248,31 @@ public class UserController {
     public BaseResult<PageInfo<UserVO>> listAdmin(@PathVariable(value = "pageSize") Integer pageSize,
                                                 @PathVariable(value = "pageNum") Integer pageNum,
                                                 @PathVariable(value = "type") Integer type) {
-        String orderByColumn = "id"+" asc";
-        PageHelper.startPage(pageNum,pageSize,orderByColumn);
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getType, type);
-        List<User> list = userService.list(wrapper);
-        List<UserVO> UserVOs = new ArrayList<>();
-        for (User user : list) {
-            Long area = user.getArea();
-            UserVO userVO = new UserVO(){
-                {
-                    BeanUtils.copyProperties(user,this);
+        try {
+            String orderByColumn = "id"+" asc";
+            PageHelper.startPage(pageNum,pageSize,orderByColumn);
+            LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(User::getType, type);
+            List<User> list = userService.list(wrapper);
+            List<UserVO> UserVOs = new ArrayList<>();
+            for (User user : list) {
+                Long area = user.getArea();
+                UserVO userVO = new UserVO(){
+                    {
+                        BeanUtils.copyProperties(user,this);
+                    }
+                };
+                if (area != null) {
+                    String districtName = districtService.getStringBaseResult(area);
+                    userVO.setDistrictName(districtName);
                 }
-            };
-            if (area != null) {
-                String districtName = districtService.getStringBaseResult(area);
-                userVO.setDistrictName(districtName);
+                UserVOs.add(userVO);
             }
-            UserVOs.add(userVO);
+            PageInfo<UserVO> pageInfo = new PageInfo<>(UserVOs);
+            return BaseResult.ok(pageInfo);
+        } catch (Exception e) {
+            throw new RuntimeException("获取用户列表失败", e);
         }
-        PageInfo<UserVO> pageInfo = new PageInfo<>(UserVOs);
-        return BaseResult.ok(pageInfo);
     }
     /**
      * 移除用户
@@ -254,20 +281,24 @@ public class UserController {
     @PostMapping("/remove")
     public BaseResult<String> remove(
             @RequestBody Long id) {
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getId, id);
-        User one = userService.getOne(wrapper);
-        if (one == null) {
-            return BaseResult.fail("用户不存在");
-        } else if (one.getType() == 3) {
-            return BaseResult.fail("不支持删除管理员");
-        } else {
-            boolean remove = userService.remove(wrapper);
-            if (remove) {
-                return BaseResult.ok("删除成功");
+        try {
+            LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(User::getId, id);
+            User one = userService.getOne(wrapper);
+            if (one == null) {
+                return BaseResult.fail("用户不存在");
+            } else if (one.getType() == 3) {
+                return BaseResult.fail("不支持删除管理员");
+            } else {
+                boolean remove = userService.remove(wrapper);
+                if (remove) {
+                    return BaseResult.ok("删除成功");
+                }
             }
+            return BaseResult.fail("删除失败");
+        } catch (Exception e) {
+            throw new RuntimeException("删除用户失败", e);
         }
-        return BaseResult.fail("删除失败");
     }
 
 
@@ -278,28 +309,32 @@ public class UserController {
     @PostMapping("/addAqi")
     public BaseResult<String> addAqi(
             @RequestBody UserReq userReq) {
-        String account = userReq.getAccount();
-        String password = userReq.getPassword();
-        String name = userReq.getName();
-        String phone = userReq.getPhone();
-        Long district = userReq.getDistrict();
-        //md5加密
-        password = DigestUtils.md5DigestAsHex(password.getBytes());
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getAccount, account);
-        User one = userService.getOne(wrapper);
-        if (one != null) {
-            return BaseResult.fail("用户已存在");
-        } else {
-            User user = new User();
-            user.setAccount(account);
-            user.setPassword(password);
-            user.setName(name);
-            user.setPhone(phone);
-            user.setType(2);
-            user.setArea(district);
-            userService.save(user);
-            return BaseResult.ok("添加成功");
+        try {
+            String account = userReq.getAccount();
+            String password = userReq.getPassword();
+            String name = userReq.getName();
+            String phone = userReq.getPhone();
+            Long district = userReq.getDistrict();
+            //md5加密
+            password = DigestUtils.md5DigestAsHex(password.getBytes());
+            LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(User::getAccount, account);
+            User one = userService.getOne(wrapper);
+            if (one != null) {
+                return BaseResult.fail("用户已存在");
+            } else {
+                User user = new User();
+                user.setAccount(account);
+                user.setPassword(password);
+                user.setName(name);
+                user.setPhone(phone);
+                user.setType(2);
+                user.setArea(district);
+                userService.save(user);
+                return BaseResult.ok("添加成功");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("添加用户失败", e);
         }
     }
 }

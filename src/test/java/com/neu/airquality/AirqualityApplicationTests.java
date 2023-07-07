@@ -4,9 +4,6 @@ import com.neu.airquality.pojo.AirException;
 import com.neu.airquality.pojo.District;
 import com.neu.airquality.service.AirExceptionService;
 import com.neu.airquality.service.DistrictService;
-import com.neu.airquality.service.impl.AirExceptionServiceImpl;
-import javafx.application.Application;
-import org.apache.catalina.Store;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AirQualityApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -50,13 +47,9 @@ for(
     String object :objects)
 
     {
-        try {
-            byte[] utf8Bytes = object.getBytes("UTF-8");
-            String utf8String = new String(utf8Bytes, "UTF-8");
-            utf8Objects.add(utf8String);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        byte[] utf8Bytes = object.getBytes(StandardCharsets.UTF_8);
+        String utf8String = new String(utf8Bytes, StandardCharsets.UTF_8);
+        utf8Objects.add(utf8String);
     }
 
 // 将UTF-8编码的字符串列表插入到数据库中

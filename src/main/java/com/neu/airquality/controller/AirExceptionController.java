@@ -27,7 +27,6 @@ public class AirExceptionController {
     /**
      * user上传空气异常信息
      *
-     * @param airExceptionReq
      * @return 返回空气异常信息表-上传结果
      */
     @ApiOperation("空气异常信息表-添加")
@@ -40,7 +39,6 @@ public class AirExceptionController {
         }catch (IllegalArgumentException e){
             return BaseResult.fail(e.getMessage());
         }
-
     }
 
     /**
@@ -69,7 +67,6 @@ public class AirExceptionController {
     /**
      * 获取所有异常表信息
      *
-     * @return
      */
     //ToDo 未确定是否分页
     @SaCheckRole("admin")
@@ -87,8 +84,6 @@ public class AirExceptionController {
 
     /**
      * 删除处理过异常表
-     * @param id
-     * @return
      */
     @SaCheckRole("admin")
     @PostMapping("/remove")

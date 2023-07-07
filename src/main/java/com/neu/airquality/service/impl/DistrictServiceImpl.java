@@ -16,7 +16,7 @@ public class DistrictServiceImpl extends ServiceImpl<DistrictMapper, District> i
         wrapper.eq(District::getId, id);
         District one = getOne(wrapper);
         if (one == null) {
-            return "error";
+            throw new IllegalArgumentException("区域不存在");
         }else return one.getName();
     }
 }

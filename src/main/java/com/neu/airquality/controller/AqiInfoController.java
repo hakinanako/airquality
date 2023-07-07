@@ -26,9 +26,8 @@ public class AqiInfoController {
     private AirExceptionService airExceptionService;
 
     /**
-     *
-     * @param id   info_id
-     * @return  返回AqiInfo型对象
+     * @param id info_id
+     * @return 返回AqiInfo型对象
      */
     @ApiOperation(value = "空气质量信息表-通过id查询")
     @GetMapping("{id}")
@@ -44,13 +43,13 @@ public class AqiInfoController {
 
     /**
      * 上传空气质量信息
-     * @param aqiInfo
-     * @return  返回空气质量信息表-上传结果
+     *
+     * @return 返回空气质量信息表-上传结果
      */
     @SaCheckRole(value = {"aqi", "admin"}, mode = SaMode.OR)
     @PostMapping
-    public  BaseResult<AqiInfo> add(@RequestBody AqiInfo aqiInfo){
-        if (StpUtil.hasRole("admin")){
+    public BaseResult<AqiInfo> add(@RequestBody AqiInfo aqiInfo) {
+        if (StpUtil.hasRole("admin")) {
             aqiInfoService.save(aqiInfo);
             return BaseResult.ok("空气质量信息-管理员上传成功", aqiInfo);
         }
@@ -64,7 +63,6 @@ public class AqiInfoController {
     /**
      * 获取所有空气质量信息
      *
-     * @return
      */
     //ToDo 未确定是否分页
     @PostMapping("/list")
@@ -88,6 +86,17 @@ public class AqiInfoController {
             e.printStackTrace();
             return BaseResult.fail(e.getMessage());
         }
+
     }
-}
+
+        /**
+         * 处理异常信息-返回Aqi等级
+         */
+        @SaCheckLogin
+        @GetMapping("/level")
+        public BaseResult<String> handleLevel (@RequestBody AqiReq aqiReq){
+            int level = AqiHelper.calculateAQI(aqiReq.getPm25(), aqiReq.getCo(), aqiReq.getSo2());
+            return BaseResult.ok("空气质量信息-处理成功", level + " ");
+        }
+    }
 

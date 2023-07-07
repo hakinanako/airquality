@@ -42,9 +42,6 @@ public class AqiInfo implements Serializable {
     @ApiModelProperty(value = "co")
     private BigDecimal co;
 
-//    @ApiModelProperty(value = "aqi")
-//    private BigDecimal aqi;
-
     @ApiModelProperty(value = "空气质量等级")
     private Integer level;
 
