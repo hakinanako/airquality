@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/aqi-info")
@@ -55,6 +56,18 @@ public class AqiInfoController {
         return BaseResult.fail("错误:空气质量信息-上传失败", aqiInfo);
     }
 
+    /**
+     * 获取所有空气质量信息
+     *
+     * @return
+     */
+    //ToDo 未确定是否分页
+    @PostMapping()
+    public BaseResult<List<AqiInfo>> query() {
+        List<AqiInfo> aqiInfos = aqiInfoService.list();
+        if (aqiInfos == null) return BaseResult.fail("无信息");
+        return BaseResult.ok(aqiInfos);
+      
     /**
      * 处理异常信息-返回Aqi等级
      */
