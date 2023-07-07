@@ -7,11 +7,8 @@ import com.neu.airquality.mapper.UserMapper;
 import com.neu.airquality.req.UserReq;
 import com.neu.airquality.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
-
-import java.util.Objects;
 
 /**
  * <p>
@@ -69,6 +66,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new IllegalArgumentException("姓名格式错误");
         }
     }
-
 
 }

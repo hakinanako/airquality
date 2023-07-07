@@ -3,16 +3,12 @@ package com.neu.airquality.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.neu.airquality.pojo.AirException;
 import com.neu.airquality.mapper.AirExceptionMapper;
-import com.neu.airquality.pojo.AqiInfo;
-import com.neu.airquality.pojo.User;
 import com.neu.airquality.req.AirExceptionReq;
 import com.neu.airquality.service.AirExceptionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.neu.airquality.service.AqiInfoService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -32,8 +28,7 @@ public class AirExceptionServiceImpl extends ServiceImpl<AirExceptionMapper, Air
         LambdaQueryWrapper<AirException> queryWrapper = new LambdaQueryWrapper<>();
         //查看异常任务
         queryWrapper.eq(AirException::getUser, id);
-        List<AirException>list = this.list(queryWrapper);
-        return list;
+        return this.list(queryWrapper);
     }
 
     @Override

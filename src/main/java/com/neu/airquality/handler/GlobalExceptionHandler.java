@@ -11,4 +11,5 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return BaseResult.fail(e.getMessage());
     }
+
 }
