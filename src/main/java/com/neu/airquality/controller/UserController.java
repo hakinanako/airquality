@@ -103,7 +103,7 @@ public class UserController {
             return BaseResult.fail(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            return BaseResult.fail(e.getMessage()+"[注册失败]");
+            return BaseResult.fail("注册失败");
         }
     }
 
