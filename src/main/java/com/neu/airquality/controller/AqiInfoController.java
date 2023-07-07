@@ -31,9 +31,14 @@ public class AqiInfoController {
      */
     @ApiOperation(value = "空气质量信息表-通过id查询")
     @GetMapping("{id}")
-    public BaseResult<AqiInfo> queryById(@ApiParam(name = "id", value = "info_id") @PathVariable String id) {
-        AqiInfo aqiInfo = aqiInfoService.getById(id);
-        return BaseResult.ok("空气质量-查询成功!", aqiInfo);
+    public BaseResult<AqiInfo> queryById(@ApiParam(name = "id", value = "info_id") @PathVariable String id){
+        try {
+            AqiInfo aqiInfo = aqiInfoService.getById(id);
+            return BaseResult.ok("空气质量-查询成功!", aqiInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BaseResult.fail(e.getMessage());
+        }
     }
 
     /**
@@ -47,7 +52,8 @@ public class AqiInfoController {
         if (StpUtil.hasRole("admin")) {
             aqiInfoService.save(aqiInfo);
             return BaseResult.ok("空气质量信息-管理员上传成功", aqiInfo);
-        } else if (StpUtil.hasRole("api")) {
+        }
+        else if (StpUtil.hasRole("api")){
             airExceptionService.handleResult(aqiInfo.getId().toString());
             return BaseResult.ok("空气质量信息-api上传成功", aqiInfo);
         }
@@ -59,11 +65,28 @@ public class AqiInfoController {
      *
      */
     //ToDo 未确定是否分页
-    @PostMapping()
+    @PostMapping("/list")
     public BaseResult<List<AqiInfo>> query() {
         List<AqiInfo> aqiInfos = aqiInfoService.list();
         if (aqiInfos == null) return BaseResult.fail("无信息");
         return BaseResult.ok(aqiInfos);
+    }
+
+    /**
+     * 处理异常信息-返回Aqi等级
+     */
+    @SaCheckLogin
+    @GetMapping("/level")
+    public BaseResult<String> handleLevel(@RequestBody AqiReq aqiReq){
+
+        try {
+            int level = AqiHelper.calculateAQI(aqiReq.getPm25(), aqiReq.getCo(), aqiReq.getSo2());
+            return BaseResult.ok("空气质量信息-处理成功", level+" ");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BaseResult.fail(e.getMessage());
+        }
+
     }
 
         /**
