@@ -34,11 +34,13 @@ public class AirExceptionController {
     @SaCheckLogin
     @PostMapping
     public BaseResult<AirExceptionReq> add(@RequestBody AirExceptionReq airExceptionReq) {
-        if (airExceptionReq != null) {
+        try {
             airExceptionService.addAirExceptionForUser(airExceptionReq);
             return BaseResult.ok("空气异常信息-上传成功", airExceptionReq);
+        }catch (IllegalArgumentException e){
+            return BaseResult.fail(e.getMessage());
         }
-        return BaseResult.fail("错误:空气异常信息-上传失败", airExceptionReq);
+
     }
 
     /**
@@ -51,11 +53,16 @@ public class AirExceptionController {
     @SaCheckLogin
     @GetMapping("/{id}")
     public BaseResult<List<AirException>> queryById(@ApiParam(name = "handlersOrUser", value = "唯一ID") @PathVariable String id) {
-        if (id != null) {
+
+        try {
             List<AirException> airExceptions = airExceptionService.queryExceptionInfo(id);
             return BaseResult.ok("查看成功", airExceptions);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BaseResult.fail(e.getMessage());
         }
-        return BaseResult.fail("查看失败");
+
+
 
     }
 
@@ -68,8 +75,14 @@ public class AirExceptionController {
     @SaCheckRole("admin")
     @PostMapping("/list")
     public BaseResult<List<AirException>> query() {
-        List<AirException> airExceptions = airExceptionService.list();
-        return BaseResult.ok(airExceptions);
+
+        try {
+            List<AirException> airExceptions = airExceptionService.list();
+            return BaseResult.ok("查询成功",airExceptions);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BaseResult.fail(e.getMessage());
+        }
     }
 
     /**
@@ -77,10 +90,11 @@ public class AirExceptionController {
      * @param id
      * @return
      */
-     @SaCheckRole("admin")
+    @SaCheckRole("admin")
     @PostMapping("/remove")
     public BaseResult<String> remove(
             @RequestBody Long id) {
+
         LambdaQueryWrapper<AirException> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(AirException::getId, id);
         AirException one = airExceptionService.getOne(wrapper);
