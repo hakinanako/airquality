@@ -9,12 +9,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.neu.airquality.common.BaseResult;
+import com.neu.airquality.common.Regex;
 import com.neu.airquality.pojo.User;
 import com.neu.airquality.req.LoginReq;
 import com.neu.airquality.req.UserReq;
 import com.neu.airquality.service.DistrictService;
 import com.neu.airquality.service.UserService;
 import com.neu.airquality.vo.UserVO;
+import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
@@ -39,7 +42,12 @@ public class UserController {
             @RequestBody LoginReq loginReq) {
         String account = loginReq.getAccount();
         String password = loginReq.getPassword();
-        //md5加密
+        if (!account.matches(Regex.ACCOUNT_REGEX)) {
+            return BaseResult.fail("账号格式不正确");
+        }
+        if (!password.matches(Regex.PASSWORD_REGEX)) {
+            return BaseResult.fail("密码格式不正确");
+        }
         password = DigestUtils.md5DigestAsHex(password.getBytes());
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getAccount, account);
@@ -87,25 +95,15 @@ public class UserController {
      * 用户注册
      */
     @PostMapping("/register")
-    public BaseResult<String> register(
-            @RequestBody UserReq userReq) {
-        String account = userReq.getAccount();
-        String password = userReq.getPassword();
-        //md5加密
-        password = DigestUtils.md5DigestAsHex(password.getBytes());
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getAccount, account);
-        User one = userService.getOne(wrapper);
-        if (one != null) {
-            return BaseResult.fail("用户已存在");
-        } else {
-            User user = new User();
-            user.setAccount(account);
-            user.setPassword(password);
-            user.setPhone(userReq.getPhone());
-            user.setName(userReq.getName());
-            userService.save(user);
+    public BaseResult<String> register(@RequestBody UserReq userReq) {
+        try {
+            userService.register(userReq);
             return BaseResult.ok("注册成功");
+        } catch (IllegalArgumentException e) {
+            return BaseResult.fail(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BaseResult.fail(e.getMessage()+"[注册失败]");
         }
     }
 
