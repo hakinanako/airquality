@@ -20,6 +20,9 @@ public class District implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
+    @ApiModelProperty(value = "父id")
+    private Long pid;
+
     @ApiModelProperty(value = "区域名称")
     private String name;
 

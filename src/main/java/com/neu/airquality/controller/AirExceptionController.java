@@ -6,22 +6,54 @@ import cn.dev33.satoken.annotation.SaCheckRole;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.neu.airquality.common.BaseResult;
 import com.neu.airquality.pojo.AirException;
+import com.neu.airquality.pojo.AqiInfo;
+import com.neu.airquality.pojo.District;
 import com.neu.airquality.req.AirExceptionReq;
 import com.neu.airquality.service.AirExceptionService;
+import com.neu.airquality.service.AqiInfoService;
+import com.neu.airquality.service.DistrictService;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping("/air-exception")
 public class AirExceptionController {
 
     @Resource
     private AirExceptionService airExceptionService;
+    @Resource
+    private DistrictService districtService;
+    @Resource
+    private AqiInfoService aqiInfoService;
+
+    @ApiModelProperty("查询省份等级超标数量")
+    @SaCheckLogin
+    @GetMapping("/district/{id}")
+    public BaseResult<Integer> getNum(@PathVariable int id){
+        try {
+            LambdaQueryWrapper<District> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(District::getPid,id);
+            List<Object> list = new ArrayList<>();
+            for (District district : districtService.list(wrapper)) {
+                list.add(district.getId());
+            }
+            LambdaQueryWrapper<AqiInfo> aqiWrapper = new LambdaQueryWrapper<>();
+            aqiWrapper.ge(AqiInfo::getLevel,3)
+                    .in(AqiInfo::getDistrict,list);
+            List<AqiInfo> aqiList = aqiInfoService.list(aqiWrapper);
+            return BaseResult.ok("成功", aqiList.size());
+        } catch (Exception e) {
+            throw new RuntimeException("查询失败", e);
+        }
+    }
 
 
     /**
@@ -68,7 +100,7 @@ public class AirExceptionController {
      */
     //ToDo 未确定是否分页
     @SaCheckRole("admin")
-    @PostMapping("/list")
+    @GetMapping("/list")
     public BaseResult<List<AirException>> query() {
 
         try {

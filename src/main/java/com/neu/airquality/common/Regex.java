@@ -7,7 +7,7 @@ public class Regex {
     /**
      * 密码 必须同时包含大小写字母 可以另外包含数字和特殊字符 长度8-20
      */
-    public static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\\d\\W]{8，20}$";
+    public static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\\d\\W]{8,20}$";
 
     /**
      * 11位电话号码

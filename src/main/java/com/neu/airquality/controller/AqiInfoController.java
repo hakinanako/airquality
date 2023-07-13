@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/aqi-info")
 public class AqiInfoController {
     @Resource
@@ -84,7 +85,43 @@ public class AqiInfoController {
             e.printStackTrace();
             return BaseResult.fail(e.getMessage());
         }
-
+    }
+    /**
+     * 处理异常信息-返回Aqi等级
+     */
+    @SaCheckLogin
+    @GetMapping("/level/{pm25}/{co}/{so2}/")
+    public BaseResult<String> handleLevel(@ApiParam(name = "pm25", value = "pm25") @PathVariable Double pm25,
+                                          @ApiParam(name = "co", value = "co") @PathVariable Double co,
+                                          @ApiParam(name = "so2", value = "so2") @PathVariable Double so2){
+        try {
+            int level = AqiHelper.calculateAQI(pm25, co, so2);
+            return BaseResult.ok("空气质量信息-处理成功", level+" ");
+        } catch (Exception e) {
+            throw new RuntimeException("查询", e);
+        }
+    }
+    @SaCheckRole("admin")
+    @GetMapping("/countRank")
+    public BaseResult<String> countAQIByRank(@RequestBody Integer level){
+        try {
+            Integer aqiNum = aqiInfoService.countAQIByRank(level);
+            return  BaseResult.ok("等级数量-成功", aqiNum + " ");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BaseResult.fail(e.getMessage());
+        }
+    }
+    @SaCheckRole("admin")
+    @GetMapping("/countMonth")
+    public BaseResult<String> countAQIByMonth(@RequestBody Integer level){
+        try {
+            Integer aqiNum = aqiInfoService.countAQIByMonth();
+            return  BaseResult.ok("过去10月超标数量-统计成功", aqiNum + " ");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BaseResult.fail(e.getMessage());
+        }
     }
     }
 

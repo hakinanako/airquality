@@ -41,6 +41,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(password);
         user.setPhone(phone);
         user.setName(name);
+        user.setType(1);
         save(user);
     }
 

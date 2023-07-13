@@ -22,15 +22,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
+    @Resource
     private UserService userService;
-    @Autowired
+    @Resource
     private DistrictService districtService;
 
     /**
@@ -107,7 +109,7 @@ public class UserController {
             return BaseResult.ok("注册成功");
         }catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("注册失败", e);
+            throw new RuntimeException("注册失败 "+e.getMessage());
         }
     }
 
@@ -136,7 +138,7 @@ public class UserController {
                 return BaseResult.ok("注销成功");
             }
         }catch (Exception e) {
-            throw new RuntimeException("注销失败", e);
+            throw new RuntimeException("注销失败 "+e.getMessage());
         }
     }
 
@@ -161,7 +163,7 @@ public class UserController {
                 return BaseResult.ok("密码正确");
             }
         } catch (Exception e) {
-            throw new RuntimeException("密码校验失败", e);
+            throw new RuntimeException("密码校验失败 "+ e.getMessage());
         }
     }
 
@@ -188,7 +190,7 @@ public class UserController {
                 return BaseResult.ok("修改成功");
             }
         } catch (Exception e) {
-            throw new RuntimeException("修改密码失败", e);
+            throw new RuntimeException("修改密码失败" + e.getMessage());
         }
     }
     /**
@@ -214,7 +216,7 @@ public class UserController {
                 return BaseResult.ok("修改成功");
             }
         } catch (Exception e) {
-            throw new RuntimeException("修改信息失败", e);
+            throw new RuntimeException("修改信息失败" + e.getMessage());
         }
     }
 
@@ -237,7 +239,7 @@ public class UserController {
                 return BaseResult.ok(one);
             }
         } catch (Exception e) {
-            throw new RuntimeException("获取用户信息失败", e);
+            throw new RuntimeException("获取用户信息失败" + e.getMessage());
         }
     }
     /**
@@ -271,7 +273,7 @@ public class UserController {
             PageInfo<UserVO> pageInfo = new PageInfo<>(UserVOs);
             return BaseResult.ok(pageInfo);
         } catch (Exception e) {
-            throw new RuntimeException("获取用户列表失败", e);
+            throw new RuntimeException("获取用户列表失败" + e.getMessage());
         }
     }
     /**
@@ -297,7 +299,7 @@ public class UserController {
             }
             return BaseResult.fail("删除失败");
         } catch (Exception e) {
-            throw new RuntimeException("删除用户失败", e);
+            throw new RuntimeException("删除用户失败" + e.getMessage());
         }
     }
 
@@ -334,7 +336,7 @@ public class UserController {
                 return BaseResult.ok("添加成功");
             }
         } catch (Exception e) {
-            throw new RuntimeException("添加用户失败", e);
+            throw new RuntimeException("添加用户失败" + e.getMessage());
         }
     }
 }

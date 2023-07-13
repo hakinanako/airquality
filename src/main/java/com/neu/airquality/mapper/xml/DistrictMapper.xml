@@ -10,11 +10,12 @@
         <result column="update_time" property="updateTime" />
         <result column="create_time" property="createTime" />
         <result column="version" property="version" />
+        <result column="pid" property="pid" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, is_deleted, update_time, create_time, version
+        id, pid, name, is_deleted, update_time, create_time, version
     </sql>
 
 </mapper>

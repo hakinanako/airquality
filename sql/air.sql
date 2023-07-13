@@ -35,6 +35,7 @@ CREATE TABLE `t_aqi_info` (
 CREATE TABLE `t_district` (
                               `id` bigint(20) NOT NULL,
                               `name` varchar(31) NOT NULL,
+                              'pid' bigint(20) NOT NULL ,
                               `is_deleted` tinyint(4) DEFAULT NULL COMMENT '逻辑删除',
                               `update_time` datetime DEFAULT NULL COMMENT '更新时间',
                               `create_time` datetime DEFAULT NULL COMMENT '添加时间',

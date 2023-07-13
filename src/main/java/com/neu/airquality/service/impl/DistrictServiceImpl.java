@@ -7,6 +7,8 @@ import com.neu.airquality.service.DistrictService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DistrictServiceImpl extends ServiceImpl<DistrictMapper, District> implements DistrictService {
 
@@ -18,5 +20,20 @@ public class DistrictServiceImpl extends ServiceImpl<DistrictMapper, District> i
         if (one == null) {
             throw new IllegalArgumentException("区域不存在");
         }else return one.getName();
+    }
+
+    @Override
+    public List<District> getCity(Long id) {
+
+        LambdaQueryWrapper<District> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(District::getName).eq(District::getPid, id);
+        try {
+            return this.list(wrapper);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
     }
 }
